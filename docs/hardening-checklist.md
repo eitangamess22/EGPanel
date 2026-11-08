@@ -1,0 +1,26 @@
+# EGPanel Hardening Checklist
+
+- Generate unique PostgreSQL, Redis, and session secrets; store them in a secret manager.
+- Terminate HTTPS at a trusted reverse proxy and redirect every HTTP request to HTTPS.
+- Enable HSTS after validating certificate and domain configuration.
+- Rotate EGAgent node tokens after enrollment and after suspected exposure.
+- Restrict EGPanel database and Redis ports to the internal Docker network.
+- Put Redis behind authentication and keep it unexposed to the public network.
+- Run EGPanel migrations before starting the web service.
+- Keep Docker socket access only on EGAgent hosts; never expose `/var/run/docker.sock` to browsers.
+- Run containers with read-only root filesystems where templates permit it.
+- Add CPU, memory, PID, and disk quotas to every server.
+- Use isolated Docker networks for each node and verify server containment.
+- Allowlist external Docker registry images in production template imports.
+- Validate every uploaded filename and archive path without trusting client separators.
+- Limit upload, archive extraction, and backup sizes.
+- Rotate backups and configure encrypted S3 buckets with least-privilege credentials.
+- Require Argon2id parameters suitable for current production hardware.
+- Require TOTP for administrative accounts.
+- Set short session and signed WebSocket token lifetimes.
+- Enable a session revocation workflow after password and security settings changes.
+- Alert on repeated login failures, node disconnections, container crashes, and denied actions.
+- Retain immutable audit logs with request IDs and actor information.
+- Patch the host OS, Docker Engine, Node.js, Go toolchain, PostgreSQL, Redis, and Nginx routinely.
+- Test restore, reinstall, node transfer, and disaster recovery procedures.
+- Back up PostgreSQL and S3/object storage separately.

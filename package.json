@@ -1,0 +1,20 @@
+{
+  "name": "egpanel",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "apps/panel",
+    "web"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w apps/panel",
+    "build": "npm run build -w apps/panel && npm run build -w web",
+    "test": "npm run test -w apps/panel",
+    "web": "npm run dev -w web",
+    "db:migrate": "npm run prisma:migrate -w apps/panel",
+    "db:generate": "npm run prisma:generate -w apps/panel"
+  },
+  "engines": {
+    "node": ">=20.11"
+  }
+}

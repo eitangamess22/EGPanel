@@ -1,0 +1,44 @@
+{
+  "apiVersion": "egpanel.io/v1",
+  "kind": "Template",
+  "metadata": {
+    "name": "Discord Bot - Python",
+    "slug": "discord-python",
+    "type": "DISCORD_PYTHON",
+    "description": "Discord bot runtime for Python 3.10, 3.11, or 3.12",
+    "version": "1.0.0"
+  },
+  "spec": {
+    "docker": {
+      "image": "python:3.12-slim",
+      "workingDirectory": "/app",
+      "stopCommand": "SIGTERM",
+      "readonlyRootFilesystem": true
+    },
+    "startup": ".venv/bin/python {{START_FILE}}",
+    "install": {
+      "script": "sh",
+      "args": ["-c", "python -m venv .venv && .venv/bin/pip install -r requirements.txt"]
+    },
+    "readyLog": "(ready|logged in|listening)",
+    "features": {
+      "pythonVersions": ["3.10", "3.11", "3.12"],
+      "virtualenv": true,
+      "requirementsInstall": true,
+      "gitClone": true,
+      "envEditor": true,
+      "crashBackoff": true,
+      "uptimeTracking": true
+    }
+  },
+  "variables": [
+    {"name":"PYTHON_VERSION","label":"Python Version","type":"SELECT","required":true,"default":"3.12","rules":{"options":["3.10","3.11","3.12"]}},
+    {"name":"START_FILE","label":"Start File","type":"TEXT","required":true,"default":"bot.py"},
+    {"name":"VIRTUALENV","label":"Use Virtual Environment","type":"BOOLEAN","required":true,"default":"TRUE"},
+    {"name":"AUTO_INSTALL","label":"Install Requirements on Start","type":"BOOLEAN","required":true,"default":"TRUE"},
+    {"name":"GIT_REPOSITORY","label":"Git Repository URL","type":"TEXT","required":false,"default":""},
+    {"name":"GIT_BRANCH","label":"Git Branch","type":"TEXT","required":false,"default":"main"},
+    {"name":"BOT_TOKEN","label":"Discord Bot Token","type":"PASSWORD","required":true,"default":""}
+  ],
+  "patches": []
+}

@@ -1,0 +1,45 @@
+{
+  "apiVersion": "egpanel.io/v1",
+  "kind": "Template",
+  "metadata": {
+    "name": "Minecraft Java",
+    "slug": "minecraft-java",
+    "type": "MINECRAFT_JAVA",
+    "description": "Minecraft Java Edition server with Vanilla, Paper, Purpur, Fabric, or Forge",
+    "version": "1.0.0"
+  },
+  "spec": {
+    "docker": {
+      "image": "ghcr.io/itzg/minecraft-server:java21",
+      "workingDirectory": "/data",
+      "stopCommand": "stop",
+      "readonlyRootFilesystem": false
+    },
+    "startup": "java -Xms128M -Xmx{{RAM}}M {{JVM_FLAGS}} -jar server.jar nogui",
+    "install": {
+      "script": "bash",
+      "args": ["/install.sh"]
+    },
+    "readyLog": "Done \\([^;]+sec\\)! For help, type \"help\"",
+    "features": {
+      "javaVersions": [8, 11, 17, 21],
+      "software": ["VANILLA", "PAPER", "PURPUR", "FABRIC", "FORGE"],
+      "eulaAutoAccept": true,
+      "aikarFlags": true,
+      "modrinthPlugins": true
+    }
+  },
+  "variables": [
+    {"name":"RAM","label":"Memory Limit (MB)","type":"NUMBER","required":true,"default":"2048","rules":{"min":512,"max":65536}},
+    {"name":"JAVA_VERSION","label":"Java Version","type":"SELECT","required":true,"default":"21","rules":{"options":[8,11,17,21]}},
+    {"name":"SERVER_SOFTWARE","label":"Server Software","type":"SELECT","required":true,"default":"PAPER","rules":{"options":["VANILLA","PAPER","PURPUR","FABRIC","FORGE"]}},
+    {"name":"SERVER_VERSION","label":"Server Version","type":"TEXT","required":true,"default":"1.20.6"},
+    {"name":"EULA","label":"Accept Minecraft EULA","type":"BOOLEAN","required":true,"default":"TRUE"},
+    {"name":"AIKAR_FLAGS","label":"Use Aikar JVM Flags","type":"BOOLEAN","required":true,"default":"TRUE"},
+    {"name":"PORT","label":"Server Port","type":"NUMBER","required":true,"default":"25565","rules":{"min":1024,"max":65535}}
+  ],
+  "patches": [
+    {"file":"server.properties","path":"server-port","target":"PORT","rule":"REPLACE"},
+    {"file":"server.properties","path":"motd","target":"SERVER_MOTD","rule":"REPLACE"}
+  ]
+}

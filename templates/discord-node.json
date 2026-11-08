@@ -1,0 +1,44 @@
+{
+  "apiVersion": "egpanel.io/v1",
+  "kind": "Template",
+  "metadata": {
+    "name": "Discord Bot - Node.js",
+    "slug": "discord-node",
+    "type": "DISCORD_NODE",
+    "description": "Discord bot runtime for Node.js 18, 20, or 22",
+    "version": "1.0.0"
+  },
+  "spec": {
+    "docker": {
+      "image": "node:22-bookworm-slim",
+      "workingDirectory": "/app",
+      "stopCommand": "SIGTERM",
+      "readonlyRootFilesystem": true
+    },
+    "startup": "npm start",
+    "install": {
+      "script": "sh",
+      "args": ["-c", "{{PACKAGE_INSTALL}}"]
+    },
+    "readyLog": "(ready|logged in|listening)",
+    "features": {
+      "nodeVersions": [18, 20, 22],
+      "packageManagers": ["npm", "pnpm", "yarn"],
+      "autoInstall": true,
+      "gitClone": true,
+      "envEditor": true,
+      "crashBackoff": true,
+      "uptimeTracking": true
+    }
+  },
+  "variables": [
+    {"name":"NODE_VERSION","label":"Node.js Version","type":"SELECT","required":true,"default":"22","rules":{"options":[18,20,22]}},
+    {"name":"PACKAGE_MANAGER","label":"Package Manager","type":"SELECT","required":true,"default":"npm","rules":{"options":["npm","pnpm","yarn"]}},
+    {"name":"START_FILE","label":"Start File","type":"TEXT","required":true,"default":"src/index.js"},
+    {"name":"AUTO_INSTALL","label":"Install Dependencies on Start","type":"BOOLEAN","required":true,"default":"TRUE"},
+    {"name":"GIT_REPOSITORY","label":"Git Repository URL","type":"TEXT","required":false,"default":""},
+    {"name":"GIT_BRANCH","label":"Git Branch","type":"TEXT","required":false,"default":"main"},
+    {"name":"BOT_TOKEN","label":"Discord Bot Token","type":"PASSWORD","required":true,"default":""}
+  ],
+  "patches": []
+}
